@@ -1,32 +1,124 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import ProductCard from './ProductCard';
 import '../styles/selections.css';
 
-const Selections = () => {
+const Selections = ({ addToCart }) => {
+  const [products, setProducts] = useState([]);
+  const [categoryFilter, setCategoryFilter] = useState('All');
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const categories = ['Seafood', 'Dessert', 'Vegetarian', 'Chicken', 'Beef', 'Breakfast'];
+        const requests = categories.map(category =>
+          axios.get(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`)
+        );
+
+        const responses = await Promise.all(requests);
+
+        const meals = responses.flatMap(response => 
+          response.data.meals.map(meal => ({
+            id: meal.idMeal,
+            title: meal.strMeal,
+            image: meal.strMealThumb,
+            category: response.config.url.split('=')[1], // Extract category from URL
+          }))
+        );
+
+        setProducts(meals);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const filteredProducts = products.filter(product => {
+    if (categoryFilter === 'All') return true;
+    return product.category === categoryFilter;
+  });
+
   return (
     <div className="selections-container">
-      <div className="filter-sidebar">
-        <h2>Filters</h2>
-        <div className="filter-section">
-          <h3>Taste</h3>
-          <label><input type="checkbox" /> Sweet</label>
-          <label><input type="checkbox" /> Salty</label>
-          <label><input type="checkbox" /> Spicy</label>
-        </div>
-        <div className="filter-section">
-          <h3>Region</h3>
-          <label><input type="checkbox" /> Asia</label>
-          <label><input type="checkbox" /> Europe</label>
-          <label><input type="checkbox" /> America</label>
-        </div>
+      <h1>Selections</h1>
+      <div className="category-filter">
+        <label>
+          <input
+            type="radio"
+            name="category"
+            value="All"
+            checked={categoryFilter === 'All'}
+            onChange={() => setCategoryFilter('All')}
+          />
+          All
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="category"
+            value="Seafood"
+            checked={categoryFilter === 'Seafood'}
+            onChange={() => setCategoryFilter('Seafood')}
+          />
+          Seafood
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="category"
+            value="Dessert"
+            checked={categoryFilter === 'Dessert'}
+            onChange={() => setCategoryFilter('Dessert')}
+          />
+          Dessert
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="category"
+            value="Vegetarian"
+            checked={categoryFilter === 'Vegetarian'}
+            onChange={() => setCategoryFilter('Vegetarian')}
+          />
+          Vegetarian
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="category"
+            value="Chicken"
+            checked={categoryFilter === 'Chicken'}
+            onChange={() => setCategoryFilter('Chicken')}
+          />
+          Chicken
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="category"
+            value="Beef"
+            checked={categoryFilter === 'Beef'}
+            onChange={() => setCategoryFilter('Beef')}
+          />
+          Beef
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="category"
+            value="Breakfast"
+            checked={categoryFilter === 'Breakfast'}
+            onChange={() => setCategoryFilter('Breakfast')}
+          />
+          Breakfast
+        </label>
       </div>
-      <div className="items-display">
-        <h2>Available Items</h2>
-        <div className="items-grid">
-          <div className="food-item">Food Item 1</div>
-          <div className="food-item">Food Item 2</div>
-          <div className="food-item">Food Item 3</div>
-          {/* Placeholder for future items */}
-        </div>
+      <div className="product-list">
+        {filteredProducts.map(product => (
+          <ProductCard key={product.id} product={product} onAddToCart={addToCart} />
+        ))}
       </div>
     </div>
   );

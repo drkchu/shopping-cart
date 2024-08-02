@@ -1,4 +1,3 @@
-/* src/styles.css */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -6,26 +5,48 @@ body {
   background-color: #f4f4f9;
 }
 
-nav ul {
-  list-style-type: none;
-  display: flex;
-  justify-content: center;
-  padding: 10px 0;
+nav {
   background-color: #fff;
   border-bottom: 1px solid #ddd;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-nav ul li {
-  margin: 0 15px;
+.nav-links {
+  display: flex;
+  gap: 20px;
 }
 
-nav ul li a {
+.nav-links a {
   text-decoration: none;
   color: #333;
   font-size: 1rem;
   transition: color 0.3s;
 }
 
-nav ul li a:hover {
+.nav-links a:hover {
   color: #4CAF50;
+}
+
+.cart-icon {
+  font-size: 1.2rem;
+}
+
+.cart-icon a {
+  text-decoration: none;
+  color: #333;
+  position: relative;
+}
+
+.cart-count {
+  background-color: #ff0000;
+  color: #fff;
+  border-radius: 50%;
+  padding: 3px 7px;
+  font-size: 0.8rem;
+  position: absolute;
+  top: -10px;
+  right: -10px;
 }
