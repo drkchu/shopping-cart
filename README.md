@@ -14,3 +14,5 @@ This project is a simple mock shopping cart application built with React. Below 
 ![Shopping Cart Page](public/images/checkout.jpg)
 
 testing... xD
+
+You can checkout the site ![here](shopping-cart-1mm.pages.dev)
